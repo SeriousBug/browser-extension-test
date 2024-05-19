@@ -1,38 +1,41 @@
 import { createRoot } from "react-dom/client";
-import "./style.css";
+import styles from "./style.css?inline";
 import { LogoSmall } from "@src/icons/selidor";
 
 export function Control() {
   return (
-    <div className="w-12 h-12 flex justify-center items-center">
-      <button className="p-2 hover:bg-[#e8eaed12] rounded-full">
-        <LogoSmall />
+    <div className="w-full h-full flex justify-center items-center">
+      <button className="w-full h-full p-2 hover:bg-[#e8eaed12] rounded-full">
+        <LogoSmall className="w-full h-full" />
       </button>
     </div>
   );
 }
 
 setTimeout(() => {
-  const editor = document.querySelector<HTMLDivElement>(
+  const attachmentTarget = document.querySelector<HTMLDivElement>(
     ".input-buttons-wrapper-bottom",
   );
+  if (!attachmentTarget) {
+    console.error("Can't find attachment target");
+    return;
+  }
 
-  console.log("DEV", import.meta.env.DEV);
-  console.log("PROD", import.meta.env.PROD);
-  console.log("MODE", import.meta.env.MODE);
-  const id = `selidor-root-${(Math.random() * 100_000).toString()}`;
+  const attachmentPoint = document.createElement("div");
+  attachmentTarget?.appendChild(attachmentPoint);
+  const shadow = attachmentPoint.attachShadow({ mode: "closed" });
 
-  const div = document.createElement("div");
-  div.id = id;
-  editor?.prepend(div);
+  const rootContainer = document.createElement("div");
+  rootContainer.className = "h-12 w-12";
+  shadow.appendChild(rootContainer);
+  const style = document.createElement("style");
+  style.innerHTML = styles;
+  shadow.appendChild(style);
 
-  const rootContainer = document.getElementById(id);
-  console.log(rootContainer === div);
   if (import.meta.env.DEV) {
     console.log("rootContainer", rootContainer);
   }
 
-  if (!rootContainer) throw new Error("Can't find Content root element");
   const root = createRoot(rootContainer);
   root.render(<Control />);
 }, 300);
