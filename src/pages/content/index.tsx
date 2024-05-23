@@ -4,15 +4,20 @@ import { LogoSmall } from "@src/icons/selidor";
 import { createPortal } from "react-dom";
 import { useHover } from "@src/lib/useHover";
 import { clsx } from "@src/lib/clsx";
+import { useRef } from "react";
 
 type PortalProps = { portal: HTMLElement | DocumentFragment };
 
 export function Control({ portal }: PortalProps) {
   const { isHovering, bindHover } = useHover();
 
+  const ref = useRef<HTMLButtonElement>(null);
+  const rect = ref?.current?.getBoundingClientRect();
+
   return (
     <div className="w-12 h-12 flex justify-center items-center">
       <button
+        ref={ref}
         className="w-full h-full p-2 hover:bg-[#e8eaed12] rounded-full relative"
         {...bindHover}
       >
@@ -21,9 +26,14 @@ export function Control({ portal }: PortalProps) {
       {createPortal(
         <div
           className={clsx(
-            "absolute top-12 left-12",
-            isHovering ? "visible" : "hidden",
+            "absolute z-10 bg-gray-800 text-white p-2 rounded-lg transition-opacity duration-200 pointer-events-none cursor-default text-xs",
+            isHovering ? "visible opacity-100" : "hidden opacity-0",
           )}
+          {...bindHover}
+          style={{
+            left: rect ? rect.left - rect.width : 0,
+            top: rect?.bottom ?? 0,
+          }}
         >
           Use your Selidor prompts
         </div>,
