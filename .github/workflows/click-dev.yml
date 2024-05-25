@@ -15,6 +15,6 @@ jobs:
             Click links below to open this PR in a dev environment:
             
             [![Open PR in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/SeriousBug/selidor/tree/${{github.head_ref}})
-            [![Open PR in DevPod](https://devpod.sh/assets/open-in-devpod.svg)](https://devpod.sh/open#https://github.com/SeriousBug/selidor/tree/${{github.head_ref}})
-            [![Open PR in CodeSandbox](https://img.shields.io/badge/Open%20PR%20in%20CodeSandbox-463ecf?style=flat&=fff)](https://codesandbox.io/p/devbox/github/SeriousBug/selidor/tree/${{github.head_ref}})
+            [![Open PR in DevPod](https://devpod.sh/assets/open-in-devpod.svg)](https://devpod.sh/open#https://github.com/SeriousBug/selidor@${{github.head_ref}})
+            [![Open PR in CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://githubbox.com/SeriousBug/selidor/tree/${{github.head_ref}})
           comment_tag: comment_click_dev
