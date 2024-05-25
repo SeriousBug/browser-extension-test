@@ -1,0 +1,20 @@
+on: pull_request
+
+permissions: 
+  pull-requests: write 
+
+jobs:
+  comment_click_dev:
+    runs-on: ubuntu-latest
+    name: Comment Dev Clicks
+    steps:
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Click links below to open this PR in a dev environment:
+            
+            [![Open PR in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/SeriousBug/selidor/tree/${{github.head_ref}})
+            [![Open PR in DevPod](https://devpod.sh/assets/open-in-devpod.svg)](https://devpod.sh/open#https://github.com/SeriousBug/selidor@${{github.head_ref}})
+            [![Open PR in CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://githubbox.com/SeriousBug/selidor/tree/${{github.head_ref}})
+          comment_tag: comment_click_dev
