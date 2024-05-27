@@ -1,12 +1,15 @@
 import { useCallback, useState } from "react";
 
-export function useHover() {
+export function useHover(opts?: { onHover?: () => void }) {
   const [isHovering, setIsHovering] = useState(false);
 
   return {
     isHovering,
     bindHover: {
-      onMouseEnter: useCallback(() => setIsHovering(true), []),
+      onMouseEnter: useCallback(() => {
+        opts?.onHover?.();
+        setIsHovering(true);
+      }, []),
       onMouseLeave: useCallback(() => setIsHovering(false), []),
     },
   };

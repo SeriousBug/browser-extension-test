@@ -2,23 +2,19 @@ import { createRoot } from "react-dom/client";
 import styles from "./style.css?inline";
 import { LogoSmall } from "@src/icons/selidor";
 import { createPortal } from "react-dom";
-import { useHover } from "@src/lib/useHover";
 import { clsx } from "@src/lib/clsx";
-import { useClientRect } from "@src/lib/useClientRect";
+import { useTooltip } from "@src/lib/useTooltip";
 
 type PortalProps = { portal: HTMLElement | DocumentFragment };
 
 export function Control({ portal }: PortalProps) {
-  const { isHovering, bindHover } = useHover();
-
-  const { ref, position } = useClientRect<HTMLButtonElement>();
+  const { isHovering, bindTarget, bindTooltip } = useTooltip<HTMLButtonElement>();
 
   return (
     <div className="w-12 h-12 flex justify-center items-center">
       <button
-        ref={ref}
         className="w-full h-full p-2 hover:bg-[#e8eaed12] rounded-full relative"
-        {...bindHover}
+        {...bindTarget}
       >
         <LogoSmall aria-label="" className="w-full h-full" />
       </button>
@@ -28,11 +24,7 @@ export function Control({ portal }: PortalProps) {
             "absolute z-10 bg-gray-800 text-white p-2 rounded-lg transition-opacity duration-200 pointer-events-none cursor-default text-xs",
             isHovering ? "opacity-100" : "opacity-0",
           )}
-          {...bindHover}
-          style={{
-            left: position.left - position.width,
-            top: position.bottom,
-          }}
+          {...bindTooltip}
         >
           Use your Selidor prompts
         </div>,
