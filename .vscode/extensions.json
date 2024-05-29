@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "github.vscode-github-actions",
+    "codezombiech.gitignore",
+    "codeandstuff.package-json-upgrade",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss"
+  ]
+}
