@@ -56,20 +56,22 @@ function Modal({ isOpen, onClose }: { isOpen: boolean; onClose?: () => void }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
             className={clsx(MODAL, "bg-black bg-opacity-50 backdrop-blur")}
-          ></motion.div>
+          />
           <motion.div
             initial={{ opacity: 0, y: 200 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 200 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
             className={clsx(MODAL, "flex justify-center items-center")}
+            aria-hidden
+            onClick={onClose}
           >
             <div className="bg-white p-4 rounded-lg">
-              <h2 className="text-xl">Modal</h2>
+              <div className="flex flex-row gap-4">
+                <h2 className="text-xl">Modal</h2>
+                <button onClick={onClose}>Close</button>
+              </div>
               <p>Content</p>
-              <button className="mt-2" onClick={onClose}>
-                Close
-              </button>
             </div>
           </motion.div>
         </>
