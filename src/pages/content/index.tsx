@@ -6,7 +6,7 @@ import { clsx } from "@src/lib/clsx";
 import { useTooltip } from "@src/lib/useTooltip";
 import { useToggle } from "@src/lib/useToggle";
 import { AnimatePresence, motion } from "framer-motion";
-import { Spinner, X } from "@phosphor-icons/react";
+import { X } from "@phosphor-icons/react";
 import { usePrompts } from "@src/lib/prompts/usePrompts";
 import { LoadingSpinner } from "@src/icons/LoadingSpinner";
 
