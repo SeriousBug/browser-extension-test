@@ -1,11 +1,14 @@
 import { createRoot } from "react-dom/client";
 import styles from "./style.css?inline";
-import { LogoSmall } from "@src/icons/selidor";
+import { LogoLarge, LogoSmall } from "@src/icons/selidor";
 import { createPortal } from "react-dom";
 import { clsx } from "@src/lib/clsx";
 import { useTooltip } from "@src/lib/useTooltip";
 import { useToggle } from "@src/lib/useToggle";
 import { AnimatePresence, motion } from "framer-motion";
+import { Spinner, X } from "@phosphor-icons/react";
+import { usePrompts } from "@src/lib/prompts/usePrompts";
+import { LoadingSpinner } from "@src/icons/LoadingSpinner";
 
 type PortalProps = { portal: HTMLElement | DocumentFragment };
 
@@ -22,7 +25,7 @@ export function Control({ portal }: PortalProps) {
         onClick={open}
         {...bindTarget}
       >
-        <LogoSmall aria-label="" className="w-full h-full" />
+        <LogoSmall aria-label="Selidor" />
       </button>
       {createPortal(
         <div
@@ -62,22 +65,34 @@ function Modal({ isOpen, onClose }: { isOpen: boolean; onClose?: () => void }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 200 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className={clsx(MODAL, "flex justify-center items-center")}
+            className={clsx(MODAL, "flex justify-center items-center p-4")}
             aria-hidden
             onClick={onClose}
           >
-            <div className="bg-white p-4 rounded-lg">
-              <div className="flex flex-row gap-4">
-                <h2 className="text-xl">Modal</h2>
-                <button onClick={onClose}>Close</button>
+            <div className="bg-white p-4 rounded-lg w-full max-w-xl h-[80vh] m-8">
+              <div className="flex flex-row justify-between gap-4 mb-8">
+                <LogoLarge className="w-[100px] h-[48px]" />
+                <button onClick={onClose}>
+                  <X aria-label="Close" />
+                </button>
               </div>
-              <p>Content</p>
+              <ListPrompts />
             </div>
           </motion.div>
         </>
       ) : null}
     </AnimatePresence>
   );
+}
+
+function ListPrompts() {
+  const prompts = usePrompts();
+
+  if (prompts.isLoading) {
+    return <LoadingSpinner className="animate-spin" />;
+  }
+
+  return <LoadingSpinner className="animate-spin" />;
 }
 
 function attachStyles(target: HTMLElement | DocumentFragment) {

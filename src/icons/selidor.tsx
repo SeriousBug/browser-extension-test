@@ -1,19 +1,17 @@
 import LogoLargeIcon from "@assets/img/selidor.svg";
 import LogoSmallIcon from "@assets/img/selidor-small.svg";
-import { DetailedHTMLProps, forwardRef } from "react";
+import { forwardRef } from "react";
 
-export const LogoLarge = forwardRef<
-  HTMLImageElement,
-  DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>
->((props, ref) => {
-  return <img ref={ref} src={LogoLargeIcon} {...props} />;
-});
+export const LogoLarge = forwardRef<SVGElement, React.SVGProps<SVGSVGElement>>(
+  (props, ref) => {
+    return <LogoLargeIcon ref={ref} {...props} />;
+  },
+);
 LogoLarge.displayName = "LogoLarge";
 
-export const LogoSmall = forwardRef<
-  HTMLImageElement,
-  DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>
->((props, ref) => {
-  return <img ref={ref} src={LogoSmallIcon} {...props} />;
-});
+export const LogoSmall = forwardRef<SVGElement, React.SVGProps<SVGSVGElement>>(
+  (props, ref) => {
+    return <LogoSmallIcon ref={ref} {...props} />;
+  },
+);
 LogoSmall.displayName = "LogoSmall";

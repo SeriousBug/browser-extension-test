@@ -3,6 +3,7 @@ import { resolve } from "path";
 import fs from "fs";
 import { defineConfig } from "vite";
 import { crx, ManifestV3Export } from "@crxjs/vite-plugin";
+import svgr from "vite-plugin-svgr";
 
 import manifest from "./manifest.json";
 import devManifest from "./manifest.dev.json";
@@ -61,6 +62,13 @@ export default defineConfig({
       },
     }),
     stripDevIcons(isDev),
+    svgr({
+      svgrOptions: {
+        plugins: ["@svgr/plugin-svgo", "@svgr/plugin-jsx"],
+        icon: "100%",
+      },
+      include: "**/*.svg",
+    }),
   ],
   publicDir,
   build: {
