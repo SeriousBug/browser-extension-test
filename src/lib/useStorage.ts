@@ -14,7 +14,7 @@ export function useStorage<T = unknown>({
    */
   key: Key;
   storage?: "local" | "sync";
-  validator: (value: unknown) => T;
+  validator: (value: unknown) => T | Promise<T>;
 }) {
   const {
     data,
@@ -22,22 +22,22 @@ export function useStorage<T = unknown>({
     isLoading,
     isValidating,
     mutate: baseMutate,
-  } = useSWR(
-    `chrome.storage.${storage}.${key}`,
-    async (): Promise<T | undefined> => {
-      const value = await chrome.storage[storage].get(key);
-      return validator(value);
-    },
-  );
+  } = useSWR(`chrome.storage.${storage}.${key}`, async () => {
+    const value = await chrome.storage[storage].get(key);
+    return await validator(value);
+  });
 
   const mutate = useCallback(async () => {
     await baseMutate();
-  }, []);
+  }, [baseMutate]);
 
-  const setData = useCallback(async () => {
-    await chrome.storage[storage].set({ [key]: data });
-    await mutate();
-  }, []);
+  const setData = useCallback(
+    async (newValue: Awaited<T>) => {
+      await chrome.storage[storage].set({ [key]: newValue });
+      await mutate();
+    },
+    [key, mutate, storage],
+  );
 
   useEffect(() => {
     chrome.storage[storage].onChanged.addListener(mutate);
