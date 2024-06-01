@@ -3,6 +3,10 @@ import useSWR from "swr";
 
 type Key = "prompts";
 
+type Listener = Parameters<
+  typeof chrome.storage.local.onChanged.addListener
+>[0];
+
 export function useStorage<T = unknown>({
   key,
   storage = "local",
@@ -40,9 +44,14 @@ export function useStorage<T = unknown>({
   );
 
   useEffect(() => {
-    chrome.storage[storage].onChanged.addListener(mutate);
+    const listener: Listener = (changes) => {
+      if (key in changes) {
+        mutate();
+      }
+    };
+    chrome.storage[storage].onChanged.addListener(listener);
     return () => {
-      chrome.storage[storage].onChanged.removeListener(mutate);
+      chrome.storage[storage].onChanged.removeListener(listener);
     };
   });
 
