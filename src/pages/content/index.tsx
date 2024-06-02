@@ -6,6 +6,7 @@ import { clsx } from "@src/lib/clsx";
 import { useTooltip } from "@src/lib/useTooltip";
 import { useToggle } from "@src/lib/useToggle";
 import { AnimatePresence, motion } from "framer-motion";
+import { SShadowError } from "@src/lib/error";
 
 type PortalProps = { portal: HTMLElement | DocumentFragment };
 
@@ -88,7 +89,7 @@ function attachStyles(target: HTMLElement | DocumentFragment) {
 
 function attachShadow<E extends Element = Element>(target: E | null) {
   if (!target) {
-    throw new Error("Can't find attachment target");
+    throw new SShadowError({});
   }
   const shadowTarget = document.createElement("div");
   target.appendChild(shadowTarget);

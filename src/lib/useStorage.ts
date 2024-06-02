@@ -7,29 +7,41 @@ type Listener = Parameters<
   typeof chrome.storage.local.onChanged.addListener
 >[0];
 
-export function useStorage<T = unknown>({
-  key,
-  storage = "local",
-  validator,
-}: {
+type StorageParams = {
   /** The key to be inserted into the storage.
    *
    * Should be unique across the app.
    */
   key: Key;
-  storage?: "local" | "sync";
+  storageType?: "local" | "sync";
+};
+
+function storageKey({ key, storageType }: StorageParams) {
+  return `chrome.storage.${storageType}.${key}`;
+}
+
+export function useStorage<T = unknown>({
+  key,
+  storageType = "local",
+  validator,
+}: {
   validator: (value: unknown) => T | Promise<T>;
-}) {
+} & StorageParams) {
   const {
     data,
     error,
-    isLoading,
     isValidating,
     mutate: baseMutate,
-  } = useSWR(`chrome.storage.${storage}.${key}`, async () => {
-    const value = await chrome.storage[storage].get(key);
-    return await validator(value);
-  });
+  } = useSWR(
+    storageKey({ key, storageType }),
+    async () => {
+      const value = await chrome.storage[storageType].get(key);
+      return await validator(value);
+    },
+    {
+      suspense: true,
+    },
+  );
 
   const mutate = useCallback(async () => {
     await baseMutate();
@@ -37,10 +49,10 @@ export function useStorage<T = unknown>({
 
   const setData = useCallback(
     async (newValue: Awaited<T>) => {
-      await chrome.storage[storage].set({ [key]: newValue });
+      await chrome.storage[storageType].set({ [key]: newValue });
       await mutate();
     },
-    [key, mutate, storage],
+    [key, mutate, storageType],
   );
 
   useEffect(() => {
@@ -49,17 +61,28 @@ export function useStorage<T = unknown>({
         mutate();
       }
     };
-    chrome.storage[storage].onChanged.addListener(listener);
+    chrome.storage[storageType].onChanged.addListener(listener);
     return () => {
-      chrome.storage[storage].onChanged.removeListener(listener);
+      chrome.storage[storageType].onChanged.removeListener(listener);
     };
   });
 
+  if (!data && !error) {
+    return {
+      isLoading: true,
+      data: undefined,
+      setData,
+      error: undefined,
+      isValidating,
+      mutate,
+    };
+  }
+
   return {
+    isLoading: false,
     data,
     setData,
     error,
-    isLoading,
     isValidating,
     mutate,
   };
