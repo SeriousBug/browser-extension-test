@@ -9,7 +9,7 @@ export function useHover(opts?: { onHover?: () => void }) {
       onMouseEnter: useCallback(() => {
         opts?.onHover?.();
         setIsHovering(true);
-      }, []),
+      }, [opts]),
       onMouseLeave: useCallback(() => setIsHovering(false), []),
     },
   };

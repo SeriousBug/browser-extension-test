@@ -43,7 +43,7 @@ export function useClientRectForRef<T extends HTMLElement>({
   const updatePositionByRef = useCallback(() => {
     const rect = ref?.current?.getBoundingClientRect();
     if (rect && !_.isEqual(rect, position)) setPosition(rect);
-  }, [ref]);
+  }, [position, ref]);
 
   useEffect(() => {
     updatePositionByRef();
@@ -53,7 +53,7 @@ export function useClientRectForRef<T extends HTMLElement>({
     return () => {
       removeEventListener("resize", update);
     };
-  }, [ref]);
+  }, [ref, updatePositionByRef]);
 
   return { position, ref, forceUpdate: updatePositionByRef };
 }
