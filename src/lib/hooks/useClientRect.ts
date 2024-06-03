@@ -41,9 +41,12 @@ export function useClientRectForRef<T extends HTMLElement>({
   const [position, setPosition] = useState<DOMRect>(DEFAULT_POSITION);
 
   const updatePositionByRef = useCallback(() => {
-    const rect = ref?.current?.getBoundingClientRect();
-    if (rect && !_.isEqual(rect, position)) setPosition(rect);
-  }, [position, ref]);
+    const newRect = ref?.current?.getBoundingClientRect();
+    if (newRect)
+      setPosition((prevRect) => {
+        return !_.isEqual(prevRect, newRect) ? newRect : prevRect;
+      });
+  }, [ref]);
 
   useEffect(() => {
     updatePositionByRef();

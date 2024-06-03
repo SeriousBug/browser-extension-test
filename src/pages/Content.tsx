@@ -8,6 +8,8 @@ import { ErrorBoundaryProvider } from "@lib/wrappers/ErrorBoundary";
 import { clsx } from "@lib/utils/clsx";
 import { SShadowError } from "@lib/utils/error";
 import { LogoSmall } from "@src/icons/selidor";
+import { stopPropagation } from "@lib/utils/stopPropagation";
+import { StrictMode } from "react";
 
 type PortalProps = { portal: HTMLElement | DocumentFragment };
 
@@ -18,30 +20,32 @@ export function Control({ portal }: PortalProps) {
   const { isOpen, open, close } = useToggle({ default: false });
 
   return (
-    <div className="w-12 h-12 flex justify-center items-center">
-      <ErrorBoundaryProvider>
-        <button
-          className="w-full h-full p-2 hover:bg-[#e8eaed12] rounded-full relative"
-          onClick={open}
-          {...bindTarget}
-        >
-          <LogoSmall aria-label="" className="w-full h-full" />
-        </button>
-      </ErrorBoundaryProvider>
-      {createPortal(
-        <div
-          className={clsx(
-            "absolute z-10 bg-gray-800 text-white p-2 rounded-lg transition-opacity duration-200 pointer-events-none cursor-default text-xs",
-            isHovering ? "opacity-100" : "opacity-0",
-          )}
-          {...bindTooltip}
-        >
-          Use your Selidor prompts
-        </div>,
-        portal,
-      )}
-      {createPortal(<Modal isOpen={isOpen} onClose={close} />, portal)}
-    </div>
+    <StrictMode>
+      <div className="w-12 h-12 flex justify-center items-center">
+        <ErrorBoundaryProvider>
+          <button
+            className="w-full h-full p-2 hover:bg-[#e8eaed12] rounded-full relative"
+            onClick={open}
+            {...bindTarget}
+          >
+            <LogoSmall aria-label="" className="w-full h-full" />
+          </button>
+        </ErrorBoundaryProvider>
+        {createPortal(
+          <div
+            className={clsx(
+              "absolute z-10 bg-gray-800 text-white p-2 rounded-lg transition-opacity duration-200 pointer-events-none cursor-default text-xs",
+              isHovering ? "opacity-100" : "opacity-0",
+            )}
+            {...bindTooltip}
+          >
+            Use your Selidor prompts
+          </div>,
+          portal,
+        )}
+        {createPortal(<Modal isOpen={isOpen} onClose={close} />, portal)}
+      </div>
+    </StrictMode>
   );
 }
 
@@ -71,7 +75,11 @@ function Modal({ isOpen, onClose }: { isOpen: boolean; onClose?: () => void }) {
               aria-hidden
               onClick={onClose}
             >
-              <div className="bg-white p-4 rounded-lg">
+              <div
+                // Stop propagation of the click event to prevent the modal from closing
+                onClick={stopPropagation}
+                className="bg-white p-4 rounded-lg"
+              >
                 <div className="flex flex-row gap-4">
                   <h2 className="text-xl">Modal</h2>
                   <button onClick={onClose}>Close</button>

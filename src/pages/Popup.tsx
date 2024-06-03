@@ -1,10 +1,4 @@
-import { useEffect } from "react";
-
 export default function () {
-  useEffect(() => {
-    console.log("Hello from the popup!");
-  }, []);
-
   return (
     <div>
       <img src="/icon-with-shadow.svg" />
