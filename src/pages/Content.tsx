@@ -10,6 +10,7 @@ import { SShadowError } from "@lib/utils/error";
 import { LogoSmall } from "@src/icons/selidor";
 import { stopPropagation } from "@lib/utils/stopPropagation";
 import { StrictMode } from "react";
+import { Button } from "@lib/components/Button";
 
 type PortalProps = { portal: HTMLElement | DocumentFragment };
 
@@ -78,13 +79,14 @@ function Modal({ isOpen, onClose }: { isOpen: boolean; onClose?: () => void }) {
               <div
                 // Stop propagation of the click event to prevent the modal from closing
                 onClick={stopPropagation}
-                className="bg-white p-4 rounded-lg"
+                className="bg-background p-4 rounded"
               >
                 <div className="flex flex-row gap-4">
                   <h2 className="text-xl">Modal</h2>
                   <button onClick={onClose}>Close</button>
                 </div>
                 <p>Contents</p>
+                <Button color="primary">Test</Button>
               </div>
             </motion.div>
           </>
