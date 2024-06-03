@@ -10,6 +10,7 @@
   "dependencies": {
     "@types/chrome": "^0.0.268",
     "@types/lodash": "^4.17.4",
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
